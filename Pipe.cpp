@@ -4,9 +4,11 @@ using namespace std;
 
 int Pipe::id = 0;
 
-Pipe::Pipe() : name(""), length(0.0), diameter(0.0), inRepair(false) { id++; }
+Pipe::Pipe() : name(""), length(0.0), diameter(0.0), inRepair(false) { id++; 
+  curent_id = id;
+}
 
-int Pipe::getId() const { return id; }
+int Pipe::getId() const { return curent_id; }
 
 std::string Pipe::getName() const { return name; }
 double Pipe::getLength() const { return length; }
@@ -18,30 +20,30 @@ void Pipe::setLength(double len) { this->length = len; }
 void Pipe::setInRepair(bool inRepair) { this->inRepair = inRepair; }
 
 void Pipe::edit() {
-  cout << "Выберите состояние трубы:\n1. Труба находится в ремонте\n2. Труба "
-          "работает\n";
+  cout << "Choose the pipe state:\n1. Pipe is under repair\n2. Pipe is "
+          "operational\n";
   inRepair = (getCorrectNumber(1, 2) == 1);
 }
 
 istream& operator>>(istream& in, Pipe& Pp) {
-  cout << "Введите имя трубы: ";
+  cout << "Enter pipe name: ";
   INPUT_LINE(in, Pp.name);
-  cout << "Введите длину трубы: ";
+  cout << "Enter pipe length: ";
   Pp.length = getCorrectNumber(0.0, numeric_limits<double>::max());
-  cout << "Введите диаметр трубы: ";
+  cout << "Enter pipe diameter: ";
   Pp.diameter = getCorrectNumber(0.0, numeric_limits<double>::max());
-  cout << "Состояние трубы:\n1. Труба в ремонте\n2. Труба работает\n";
+  cout << "Pipe state:\n1. Pipe is under repair\n2. Pipe is operational\n";
   Pp.inRepair = (getCorrectNumber(1, 2) == 1);
   return in;
 }
 
 ostream& operator<<(ostream& out, const Pipe& Pp) {
   out << "----------------------------------------\n";
-  out << "Информация о трубе:\n";
-  out << "Имя: " << Pp.name << "\n";
-  out << "Длина: " << Pp.length << "\n";
-  out << "Диаметр: " << Pp.diameter << "\n";
-  out << "Состояние: " << (Pp.inRepair ? "В ремонте" : "Работает") << "\n";
+  out << "Pipe information: (ID: " << Pp.getId() << ")\n";
+  out << "Name: " << Pp.name << "\n";
+  out << "Length: " << Pp.length << "\n";
+  out << "Diameter: " << Pp.diameter << "\n";
+  out << "State: " << (Pp.inRepair ? "Under repair" : "Operational") << "\n";
   out << "----------------------------------------\n";
   return out;
 }

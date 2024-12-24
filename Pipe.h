@@ -12,6 +12,7 @@
 class Pipe {
  private:
   static int id;
+  int curent_id;
   std::string name;
   double length;
   double diameter;

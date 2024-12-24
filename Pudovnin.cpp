@@ -29,12 +29,6 @@ bool pipeInputEdit() {
   return getCorrectNumber(1, 2) == 1;
 }
 
-bool csInputEdit() {
-  cout << "Выберите состояние трубы:\n1. Труба находится в ремонте\n2. Труба "
-          "работает\n";
-  return getCorrectNumber(1, 2) == 1;
-}
-
 int choose() {
   std::cout << "1.Choose all objects" << std::endl;
   std::cout << "2.Choose some objects" << std::endl;
@@ -108,6 +102,59 @@ void filter_pipe(unordered_map<int, Pipe>& pipes) {
   }
 }
 
+void filter_compressor_stations(unordered_map<int, CompressorStation>& compressor_stations) {
+  std::cout << "1.Filter by name" << std::endl
+            << "2.Filter by \"percent of used worcstataoins >= \"" << std::endl;
+  int choice = getCorrectNumber(1, 5);
+  std::unordered_set<int> ids;
+
+  switch (choice) {
+    case 1: {
+      string name;
+      cout << "Input name of pipe: ";
+      INPUT_LINE(cin, name);
+      filterBy(ids, compressor_stations, checkByName, name);
+      break;
+    }
+    case 2: {
+      double percent = getCorrectNumber(0.0, 100.0);
+      filterBy(ids, compressor_stations, check_getUsagePercentage, percent);
+      break;
+    }
+    default:
+      break;
+  }
+
+  if (show(ids, compressor_stations)) {
+    std::cout << "1.close" << std::endl << "2.filter CS" << std::endl;
+    choice = getCorrectNumber(1, 3);
+
+    if (choice == 1) {
+      return;
+    }
+
+    if (choice == 2) {
+
+    	choice = choose();
+
+    	if (choice == 2)
+    		ids = get_new_ids(ids);
+
+    	choice = del_or_edit();
+
+    	if (choice == 1) deleteObjects(ids, compressor_stations);
+    	if (choice == 2) {
+    		std::cout << "Input number of workshops to add: ";
+    		int num = getCorrectNumber(std::numeric_limits<int>::max(),
+    std::numeric_limits<int>::max()); 		
+    for (int i : ids) {
+      compressor_stations[i].updateRunningWorkshops(num);
+    }
+    	}
+    }
+  }
+}
+
 void printComands() {
   cout << "1. Add a pipe\n";
   cout << "2. Add a CS\n";
@@ -126,7 +173,14 @@ void printComands() {
 
 int main() {
   RedirectOutputWrapper cerr_out(cerr);
-  string time = "";
+  time_t rawtime;
+  struct tm * timeinfo;
+  char buffer[80];
+
+  time (&rawtime);
+  timeinfo = localtime(&rawtime);
+  strftime(buffer,sizeof(buffer),"%d-%m-%Y_%H:%M:%S",timeinfo);
+  std::string time(buffer);
   ofstream logfile("log_" + time + ".txt");
   if (logfile) cerr_out.redirect(logfile);
   unordered_map<int, Pipe> pipes;

@@ -36,6 +36,7 @@ clean:
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f *.info
+	rm -f log_*
 	rm -rf report/
 
 clang:

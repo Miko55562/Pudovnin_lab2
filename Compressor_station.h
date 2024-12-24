@@ -12,6 +12,7 @@
 class CompressorStation {
  private:
   static int id;
+  int curent_id;
   std::string name;
   int totalWorkshops;
   int runningWorkshops;

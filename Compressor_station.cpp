@@ -7,9 +7,10 @@ int CompressorStation::id = 0;
 CompressorStation::CompressorStation()
     : name(""), totalWorkshops(0), runningWorkshops(0), efficiency(0.0) {
   id++;
+  curent_id = id;
 }
 
-int CompressorStation::getId() const { return id; }
+int CompressorStation::getId() const { return curent_id; }
 
 string CompressorStation::getName() const { return name; }
 
@@ -59,7 +60,7 @@ istream& operator>>(istream& in, CompressorStation& Cs) {
 
 ostream& operator<<(ostream& out, const CompressorStation& Cs) {
   out << "----------------------------------------------------------------\n"
-      << "Compressor Station (ID: " << Cs.id << ")\n"
+      << "Compressor Station (ID: " << Cs.getId() << ")\n"
       << "Name: " << Cs.name << "\n"
       << "Total Workshops: " << Cs.totalWorkshops << "\n"
       << "Running Workshops: " << Cs.runningWorkshops << "\n"
